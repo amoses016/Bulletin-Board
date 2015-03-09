@@ -34,32 +34,39 @@ public class MainGUI {
 	private static int ROW_HEIGHT = 24;
 	
 	public static GridPane load() {	
+		//Add main page GridPane
+		GridPane screenHeader = new GridPane();
+		screenHeader.getStyleClass().add("gridpane-header");
+		screenHeader.setAlignment(Pos.TOP_CENTER);
+		
+		//Add sign-up/sign-in buttons
 		Button signUpBtn = new Button("Sign Up");
 		Button signInBtn = new Button("Sign In");
 
+		//Add HBox for buttons and add them to it
 		HBox headerBtns = new HBox();
 		headerBtns.getStyleClass().add("hbox");
 		headerBtns.getChildren().addAll(signInBtn, signUpBtn);
+		screenHeader.add(headerBtns, 2, 0);
 		
+		//Add labels for main page
 		Label mainPageTitle = new Label ("Mind Grapes");
 		Label testUserWelcome = new Label ("Welcome, DudeBro18!");
 		mainPageTitle.setFont(new Font("Ariel",23));
-
-		GridPane screenHeader = new GridPane();
-		screenHeader.getStyleClass().add("gridpane-header");
 		screenHeader.add(mainPageTitle, 0, 0);
 		screenHeader.add(testUserWelcome, 1, 0);
-		screenHeader.add(headerBtns, 2, 0);
-		screenHeader.setAlignment(Pos.TOP_CENTER);
 
+		//Add GridPane for main part of the screen (below headers)
 		GridPane screen = new GridPane();
 		screen.getStyleClass().add("gridpane");		
 		screen.add(screenHeader, 0, 0);
-		
-		List<Post> allPosts = Post.getAllPosts();
-		ListView<HBox> postListView = new ListView<>();
 		screen.setAlignment(Pos.TOP_CENTER);
 		
+		//Get all posts
+		List<Post> allPosts = Post.getAllPosts();
+		
+		//Populate all posts in GridPane
+		ListView<HBox> postListView = new ListView<>();
 		if (allPosts.size() == 0) {
 			Label noPosts = new Label ("No Posts Yet!");
 			screen.add(noPosts, 0, 1);
@@ -80,6 +87,7 @@ public class MainGUI {
 			screen.add(postListView, 0, 2);
 		}
 		
+		//Add clickability to any post to take the user to the post view page
 		postListView.setOnMouseClicked(new EventHandler<MouseEvent>(){
 	          @Override
 	          public void handle(MouseEvent arg0) {
@@ -90,14 +98,15 @@ public class MainGUI {
 	 
 	      });
 		
+		
+		//Add button to add a new post
 		Button newPostButton = new Button("New Post");
 		newPostButton.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent e) {
 				MainGUI.setContent(PostGUI.loadPostNew());
 			}
-		});
-		
+		});		
 		screen.add(newPostButton, 0, 3);
 
 		return screen;
@@ -120,9 +129,7 @@ public class MainGUI {
 	
 	public static int trimSelectedID(String selection) {
 		String[] tokens = selection.split("'");
-		//System.out.println(tokens[1]);
 		String[] tokenTokens = tokens[1].split(" ");
-		//System.out.println(tokenTokens[0]);
 
 		return Integer.parseInt(tokenTokens[0]);
 	}

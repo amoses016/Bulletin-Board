@@ -21,6 +21,19 @@ public class Post {
 	
 	public Post() {};
 	
+	/**
+	 * Post constructor
+	 * 
+	 * @param newTitle
+	 *            New title contents
+	 * @param newMessage
+	 *            New message contents
+	 * @param newUser
+	 *            Username submitting comment
+	 * @param newSubmitted
+	 *            Timestamp of when comment was submitted
+	 * @return none
+	 */	
 	public Post(int newID, String newTitle, String newMessage, String newUser, Timestamp newSubmitted) {
 		ID = newID;
 		title = newTitle;
@@ -69,6 +82,11 @@ public class Post {
 		submitted = newSubmitted;
 	}
 
+	/**
+	 * Submits comment at current timestamp
+	 * 
+	 * @return List<Post> containing all posts
+	 */
 	public static List<Post> getAllPosts() {
 		List<Post> posts = FXCollections.observableArrayList();
 		String query = "SELECT * FROM " + postDBTable + " ORDER BY post_id DESC;";
@@ -98,6 +116,13 @@ public class Post {
 		return posts;
 	}
 	
+	/**
+	 * Gets post with a given post ID
+	 * 
+	 * @param postID
+	 *            Post ID to pull post details
+	 * @return Post object containing post details
+	 */
 	public static Post getPostGivenID(int postID) {
 		Post post = new Post();
 		String query = "SELECT * FROM " + postDBTable + " WHERE post_id = " + postID + ";";
@@ -126,6 +151,17 @@ public class Post {
 		return post;
 	}
 	
+	/**
+	 * Submits post at current timestamp
+	 * 
+	 * @param newMessage
+	 *            New message contents
+	 * @param newUser
+	 *            Username submitting comment
+	 * @param newPostID
+	 *            Post ID to which the comment is being submitted
+	 * @return true if successful
+	 */
 	public static boolean submitPost(String newTitle, String newMessage, String user) {
 		Date date = new Date();
 		Timestamp currentTS = new Timestamp(date.getTime());

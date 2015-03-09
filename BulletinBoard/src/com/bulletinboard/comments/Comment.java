@@ -58,7 +58,14 @@ public class Comment {
 	public void setPostID(int postID) {
 		this.postID = postID;
 	}
-
+	
+	/**
+	 * Gets all comments with a given post ID
+	 * 
+	 * @param postID
+	 *            Post ID to pull the comments
+	 * @return List<Comment> containing all comments for the post with the given post ID
+	 */
 	public static List<Comment> getAllCommentsGivenPostID(int postID) {
 		List<Comment> comments = FXCollections.observableArrayList();
 		String query = "SELECT * FROM " + commentDBTable + " WHERE post_id = " + postID + " ORDER BY comment_id DESC;";
@@ -98,7 +105,6 @@ public class Comment {
 	 * @param newPostID
 	 *            Post ID to which the comment is being submitted
 	 * @return true if successful
-	 * @throws SQLException 
 	 */
 	public static boolean submitComment (String newMessage, String user, int postID) {
 		Date date = new Date();

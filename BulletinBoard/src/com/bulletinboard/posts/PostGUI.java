@@ -22,7 +22,8 @@ import javafx.scene.text.Text;
 public class PostGUI {
 
 	public static BorderPane loadPostView(int postID) {
-		Button back = new Button("Home Page");
+		//Add back button
+		Button back = new Button("Home Page");  
 		back.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent e) {
@@ -30,32 +31,43 @@ public class PostGUI {
 			}
 		});
 		
-		Post post = Post.getPostGivenID(postID);
-		Label postTitle = new Label(post.getTitle());
+		//get Post details
+		Post post = Post.getPostGivenID(postID); 
+		
+		//Set Post title
+		Label postTitle = new Label(post.getTitle()); 
 		postTitle.setFont(new Font("Ariel",23));
 		
-		Text postText = new Text(post.getMessage());
-		postText.setWrappingWidth(800);
-		postText.setFont(new Font("Ariel",15));
-				
-		GridPane postPane = new GridPane();
+		//Set Post message
+		Text postMessage = new Text(post.getMessage()); 
+		postMessage.setWrappingWidth(800);
+		postMessage.setFont(new Font("Ariel",15));
+		
+		//Initialize GridPane to contain all post details
+		GridPane postPane = new GridPane(); 
 		postPane.getStyleClass().add("gridpane");
 		
-		VBox postViewVBox = new VBox();
+		//Initialize Post VBox and add title and message
+		VBox postViewVBox = new VBox(); 
 		postViewVBox.getStyleClass().add("vbox");
-		postViewVBox.getChildren().addAll(postTitle,postText);
-				
-		Label commentsTitle = new Label("Comments:");
+		postViewVBox.getChildren().addAll(back,postTitle,postMessage);
+		
+		//Initialize comments title
+		Label commentsTitle = new Label("Comments:"); 
 		commentsTitle.setFont(new Font("Ariel",20));
 		
-		GridPane commentsGP = new GridPane();
+		//Initialize GridPane to hold all comments
+		GridPane commentsGP = new GridPane(); 
 		commentsGP.getStyleClass().add("gridpane");
 		commentsGP.add(commentsTitle, 0, 0);
 		
-		databaseUtils.connect();
+		//connect to database
+		databaseUtils.connect(); 
 		
-		List<Comment> allPostComments = Comment.getAllCommentsGivenPostID(postID);
+		// get all comments
+		List<Comment> allPostComments = Comment.getAllCommentsGivenPostID(postID); 
 		
+		//Populate commentsGP
 		if (allPostComments.size() == 0) { 
 			Label noComments = new Label ("No Comments Yet!");
 			System.out.println("No comments on post " + postID);
@@ -78,10 +90,12 @@ public class PostGUI {
 			postViewVBox.getChildren().add(commentsGP);
 		}
 		
+		//Add comment text box
 		TextArea commentBox = new TextArea();
-		Button commentSubmit = new Button("Submit Comment");
 		commentBox.setWrapText(true);
 		
+		//Add submit comment button
+		Button commentSubmit = new Button("Submit Comment");
 		commentSubmit.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent e) {
@@ -99,55 +113,73 @@ public class PostGUI {
 			}
 		});
 		
-		postViewVBox.getChildren().addAll(commentBox,commentSubmit,back);
+		//Add comment box, button to vbox
+		postViewVBox.getChildren().addAll(commentBox,commentSubmit);
 		postPane.add(postViewVBox,0,0);
 
+		//Add GridPane to BorderPane
 		BorderPane postRoot = new BorderPane();
 		postRoot.setCenter(postPane);
 		
+		//disconnect from database
 		databaseUtils.disconnect();
 		
 		return postRoot;
 	}
 	
 	public static BorderPane loadPostNew() {
-		BorderPane postRoot = new BorderPane();
+		//Add post GridPane
 		GridPane postPane = new GridPane();
-		//postPane.setVgap(10);
 		postPane.getStyleClass().add("gridpane");
 		
+		//Add back button
+		Button back = new Button("Home Page");
+		back.setOnAction(new EventHandler<ActionEvent>() {
+			@Override
+			public void handle(ActionEvent e) {
+				MainGUI.setContent(MainGUI.load());
+			}
+		});
+		postPane.add(back, 0, 0);	
+		
+		//Add post header
 		Label newPostHeader = new Label("Submit a New Post:");
 		newPostHeader.setFont(new Font("Ariel",23));
+		postPane.add(newPostHeader, 0, 1);
 		
+		//Add new post title label
 		Label newPostTitle = new Label("Title: ");
 		newPostTitle.setFont(new Font("Ariel",18));
-		TextField newPostTitleText = new TextField();
+		postPane.add(newPostTitle, 0, 2);
 		
+		//Add new post title text field
+		TextField newPostTitleText = new TextField();
+		postPane.add(newPostTitleText, 0, 3);
+		
+		//Add new post message label
 		Label newPostMessage = new Label("Message: ");
 		newPostMessage.setFont(new Font("Ariel",18));
+		postPane.add(newPostMessage, 0, 4);
+
+		//Add new post message text field
 		TextArea newPostMessageText = new TextArea();
 		newPostMessageText.setWrapText(true);
+		postPane.add(newPostMessageText, 0, 5);		
 		
-		postPane.add(newPostHeader, 0, 0);
-		postPane.add(newPostTitle, 0, 1);
-		postPane.add(newPostTitleText, 0, 2);
-		postPane.add(newPostMessage, 0, 3);
-		postPane.add(newPostMessageText, 0, 4);		
-		
-		Button postSubmit = new Button("Submit Post");
-		
+		//Add post submit button
+		Button postSubmit = new Button("Submit Post");		
 		postSubmit.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent e) {
 				if (newPostTitleText.getText().isEmpty()) {
 					Text postError = new Text("Title cannot be blank.");
 					postError.setFill(Color.RED);
-					postPane.add(postError, 2, 2);
+					postPane.add(postError, 2, 3);
 				}
 				else if (newPostMessageText.getText().isEmpty()) {
 					Text postError = new Text("Message cannot be blank.");
 					postError.setFill(Color.RED);
-					postPane.add(postError, 2, 4);
+					postPane.add(postError, 2, 5);
 				}
 				else {
 					if(!Post.submitPost(newPostTitleText.getText(), newPostMessageText.getText(), "DudeBro18")) {
@@ -156,22 +188,11 @@ public class PostGUI {
 					MainGUI.setContent(MainGUI.load());
 				}
 			}
-		});
-		
-	
-		Button back = new Button("Home Page");
-		
-		back.setOnAction(new EventHandler<ActionEvent>() {
-			@Override
-			public void handle(ActionEvent e) {
-				MainGUI.setContent(MainGUI.load());
-			}
-		});
-		
-		
+		});		
 		postPane.add(postSubmit, 0, 5);	
-		postPane.add(back, 0, 6);	
 		
+		//Add GridPane to BorderPane
+		BorderPane postRoot = new BorderPane();
 		postRoot.setCenter(postPane);
 		
 		return postRoot;
