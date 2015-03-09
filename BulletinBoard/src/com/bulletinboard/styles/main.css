@@ -1,0 +1,56 @@
+.vbox {
+	-fx-spacing: 20;
+	-fx-padding: 15;
+}
+
+.vbox-comments {
+	-fx-spacing: 20;
+	-fx-padding: 8;
+	-fx-border-color: black
+}
+
+.hbox {
+	-fx-spacing: 20;
+}
+
+.gridpane {
+	-fx-padding: 15;
+	-fx-hgap: 300;
+	-fx-vgap: 10;
+}
+
+.gridpane-comments {
+	-fx-padding: 15;
+	-fx-hgap: 300;
+	-fx-vgap: 10;
+	-fx-border-color: black
+}
+
+.gridpane-header {
+	-fx-hgap: 300;
+}
+
+.button {
+	-fx-background-color: #00AAED;
+    -fx-background-radius: 8,7,6;
+    -fx-background-insets: 0,1,2;
+    -fx-text-fill: white;
+}
+
+.button:focused {
+    -fx-color: turquoise;
+    -fx-background-color: turquoise, #00AAED;
+    -fx-background-insets: -1.4, 0, 1, 2;
+    -fx-background-radius:  6.4, 5, 4, 3;
+}
+
+.button:hover {
+	-fx-background-color: derive(#00AAED, -20%);
+}
+
+.button:pressed {
+    -fx-color: turquoise;
+    -fx-background-color: turquoise, derive(#00AAED, -20%);
+    -fx-background-insets: -1.4, 0, 1, 2;
+    -fx-background-radius:  6.4, 5, 4, 3;
+}
